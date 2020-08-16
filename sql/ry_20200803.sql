@@ -121,7 +121,7 @@ create table sys_role (
 -- ----------------------------
 -- 初始化-角色信息表数据
 -- ----------------------------
-insert into sys_role values('1', '系统管理员', 'admin',  1, 1, '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '系统管理员');
+insert into sys_role values('1', '超级管理员', 'admin',  1, 1, '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '超级管理员');
 insert into sys_role values('2', '普通角色',   'common', 2, 2, '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '普通角色');
 
 
@@ -535,6 +535,7 @@ insert into sys_config values(1, '主框架页-默认皮肤样式名称',     's
 insert into sys_config values(2, '用户管理-账号初始密码',         'sys.user.initPassword',    '123456',        'Y', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '初始化密码 123456');
 insert into sys_config values(3, '主框架页-侧边栏主题',           'sys.index.sideTheme',      'theme-dark',    'Y', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '深黑主题theme-dark，浅色主题theme-light，深蓝主题theme-blue');
 insert into sys_config values(4, '账号自助-是否开启用户注册功能', 'sys.account.registerUser', 'false',         'Y', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '是否开启注册用户功能');
+insert into sys_config values(5, '用户管理-密码字符范围',         'sys.account.chrtype',      '0',             'Y', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '默认任意字符范围，0任意（密码可以输入任意字符），1数字（密码只能为0-9数字），2英文字母（密码只能为a-z和A-Z字母），3字母和数字（密码必须包含字母，数字）,4字母数组和特殊字符（密码必须包含字母，数字，特殊字符-_）');
 
 
 -- ----------------------------
@@ -660,6 +661,8 @@ create table gen_table (
   business_name        varchar(30)                                comment '生成业务名',
   function_name        varchar(50)                                comment '生成功能名',
   function_author      varchar(50)                                comment '生成功能作者',
+  gen_type             char(1)         default '0'                comment '生成代码方式（0zip压缩包 1自定义路径）',
+  gen_path             varchar(200)    default '/'                comment '生成路径（不填默认项目路径）',
   options              varchar(1000)                              comment '其它生成选项',
   create_by            varchar(64)     default ''                 comment '创建者',
   create_time 	       datetime                                   comment '创建时间',
