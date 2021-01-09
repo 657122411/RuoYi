@@ -5,11 +5,15 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSON;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.CxSelect;
+import com.ruoyi.common.json.JSONObject;
+import com.ruoyi.common.json.JSONObject.JSONArray;
+import com.ruoyi.common.utils.StringUtils;
 
 /**
  * 表单相关
@@ -83,6 +87,24 @@ public class DemoFormController
     public String sortable()
     {
         return prefix + "/sortable";
+    }
+
+    /**
+     * 单据打印
+     */
+    @GetMapping("/invoice")
+    public String invoice()
+    {
+        return prefix + "/invoice";
+    }
+
+    /**
+     * 标签 & 提示
+     */
+    @GetMapping("/labels_tips")
+    public String labels_tips()
+    {
+        return prefix + "/labels_tips";
     }
 
     /**
@@ -215,6 +237,48 @@ public class DemoFormController
 
         mmap.put("data", JSON.toJSON(cxList));
         return prefix + "/cxselect";
+    }
+
+    /**
+     * 局部刷新
+     */
+    @GetMapping("/localrefresh")
+    public String localRefresh(ModelMap mmap)
+    {
+        JSONArray list = new JSONArray();
+        JSONObject item = new JSONObject();
+        item.put("name", "这条任务数据是由ModelMap传递到页面的，点击添加按钮后会将这条数据替换为新数据");
+        item.put("type", "默认");
+        item.put("date", "2020.06.10");
+        list.add(item);
+        mmap.put("tasks", list);
+        mmap.put("min", 2);
+        mmap.put("max", 10);
+        return prefix + "/localrefresh";
+    }
+
+    /**
+     * 局部刷新-添加任务
+     * 
+     * @param fragment 页面中的模板名称
+     * @param taskName 任务名称
+     */
+    @PostMapping("/localrefresh/task")
+    public String localRefreshTask(String fragment, String taskName, ModelMap mmap)
+    {
+        JSONArray list = new JSONArray();
+        JSONObject item = new JSONObject();
+        item.put("name", StringUtils.defaultIfBlank(taskName, "通过电话销售过程中了解各盛市的设备仪器使用、采购情况及相关重要追踪人"));
+        item.put("type", "新增");
+        item.put("date", "2018.06.10");
+        list.add(item);
+        item = new JSONObject();
+        item.put("name", "提高自己电话营销技巧，灵活专业地与客户进行电话交流");
+        item.put("type", "新增");
+        item.put("date", "2018.06.12");
+        list.add(item);
+        mmap.put("tasks", list);
+        return prefix + "/localrefresh::" + fragment;
     }
 
     /**
