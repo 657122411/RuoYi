@@ -123,6 +123,7 @@
 								<li><a class="menuItem" th:href="@{/demo/table/subdata}">主子表提交</a></li>
 								<li><a class="menuItem" th:href="@{/demo/table/refresh}">表格自动刷新</a></li>
 								<li><a class="menuItem" th:href="@{/demo/table/print}">表格打印配置</a></li>
+								<li><a class="menuItem" th:href="@{/demo/table/dynamicColumns}">表格动态列</a></li>
 								<li><a class="menuItem" th:href="@{/demo/table/other}">表格其他操作</a></li>
 							</ul>
                         </li>
@@ -197,7 +198,7 @@
 						</a>
 						<ul class="dropdown-menu">
 							<li class="mt5">
-								<a th:href="@{/system/user/profile}" class="menuItem">
+								<a th:href="@{/system/user/profile}" class="menuItem noactive">
 								<i class="fa fa-user"></i> 个人中心</a>
 							</li>
 							<li>
@@ -320,11 +321,15 @@ function applyPath(url) {
 }
 
 $(function() {
+	var lockPath = storage.get('lockPath');
 	if($.common.equals("history", mode) && window.performance.navigation.type == 1) {
 		var url = storage.get('publicPath');
 	    if ($.common.isNotEmpty(url)) {
 	    	applyPath(url);
 	    }
+	} else if($.common.isNotEmpty(lockPath)) {
+	    applyPath(lockPath);
+	    storage.remove('lockPath');
 	} else {
 		var hash = location.hash;
 	    if ($.common.isNotEmpty(hash)) {
